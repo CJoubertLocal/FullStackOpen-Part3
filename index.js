@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 
 
 let notes = [
@@ -42,7 +43,17 @@ app.get('/info', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
   if (notes) {
-    response.send(notes)
+    response.json(notes)
+  } else {
+    response.status(404).end()
+  }
+})
+
+app.get('/api/persons/:id', (request, response) => {
+  result = notes.filter(n => n.id === Number(request.params.id))
+
+  if (result.length === 1) {
+    response.send(result)
   } else {
     response.status(404).end()
   }
