@@ -1,0 +1,27 @@
+{
+  "name": "fullstackopen-part3",
+  "version": "0.0.1",
+  "description": "This is a phonebook application, programmed with node and express.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "test",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CJoubertLocal/FullStackOpen-Part3.git"
+  },
+  "author": "Christian Joubert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CJoubertLocal/FullStackOpen-Part3/issues"
+  },
+  "homepage": "https://github.com/CJoubertLocal/FullStackOpen-Part3#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
