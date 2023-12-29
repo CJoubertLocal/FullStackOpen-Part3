@@ -1,8 +1,15 @@
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+
 app.use(express.json())
-app.use(morgan('tiny'))
+
+// based on getMethodToken
+// at https://github.com/expressjs/morgan/blob/master/index.js
+morgan.token('body', function getReqBody(req) {
+  return JSON.stringify(req.body)
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
 let entries = [
@@ -16,7 +23,7 @@ let entries = [
       "name": "Ada Lovelace", 
       "number": "39-44-5323523"
     },
-    { 
+    {
       "id": 3,
       "name": "Dan Abramov", 
       "number": "12-43-234345"
