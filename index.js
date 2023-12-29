@@ -25,8 +25,27 @@ let notes = [
     }
 ]
 
+app.get('/info', (request, response) => {
+  const date = new Date();
+
+  info = `<p>
+          Phonebook has info for ${notes.length} people
+        </p>
+        <p>
+          ${date}
+        </p>`
+  response.set('Content-Type', 'text/html');
+  response.send(
+       info
+  )  
+})
+
 app.get('/api/persons', (request, response) => {
+  if (notes) {
     response.send(notes)
+  } else {
+    response.status(404).end()
+  }
 })
 
 
