@@ -73,12 +73,14 @@ app.post('/api/persons/', (request, response)=> {
     })
   }
 
-  if (entries.filter(e => e.name === request.body.name).length) {
+  if (entries.filter(e => e.name.toLowerCase() === request.body.name.toLowerCase()).length) {
     return response.status(406).json({
       error: `There is already a phonebok entry with this exact name.`
     })
   }
 
+  // assumes number of entries will never be as large as 100000.
+  // an alternative to take double the current length of the array of entries.
   const newID = Math.floor(Math.random() * 100000)
   while (entries.filter(e => e.id === newID).length > 0) {
     newID = Math.floor(Math.random() * 100000)
