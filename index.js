@@ -3,7 +3,7 @@ const app = express()
 app.use(express.json())
 
 
-let notes = [
+let entries = [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -30,7 +30,7 @@ app.get('/info', (request, response) => {
   const date = new Date();
 
   info = `<p>
-          Phonebook has info for ${notes.length} people
+          Phonebook has info for ${entries.length} people
         </p>
         <p>
           ${date}
@@ -42,15 +42,15 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-  if (notes) {
-    response.json(notes)
+  if (entries) {
+    response.json(entries)
   } else {
     response.status(404).end()
   }
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  result = notes.filter(n => n.id === Number(request.params.id))
+  result = entries.filter(e => e.id === Number(request.params.id))
 
   if (result.length === 1) {
     response.send(result)
@@ -59,8 +59,41 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+app.post('/api/persons/', (request, response)=> {
+  
+  if (request.body.name === undefined) {
+    return response.status(400).json({
+      error: `Please include a name for the person to be added to the phone book.`
+    })
+  }
+  
+  if (request.body.number === undefined) {
+    return response.status(400).json({
+      error: `Please include a number for the person to be added to the phone book.`
+    })
+  }
+
+  if (entries.filter(e => e.name === request.body.name).length) {
+    return response.status(406).json({
+      error: `There is already a phonebok entry with this exact name.`
+    })
+  }
+
+  const newID = Math.floor(Math.random() * 100000)
+  while (entries.filter(e => e.id === newID).length > 0) {
+    newID = Math.floor(Math.random() * 100000)
+  }
+
+  const newEntry = request.body
+  newEntry.id = newID
+
+  entries = entries.concat(newEntry)
+
+  response.json(newEntry)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
-  notes = notes.filter(n => n.id !== Number(request.params.id))
+  entries = entries.filter(e => e.id !== Number(request.params.id))
   response.status(204).end()
 })
 
