@@ -59,6 +59,10 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+  notes = notes.filter(n => n.id !== Number(request.params.id))
+  response.status(204).end()
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
