@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+app.use(express.static('dist'))
 
 // based on getMethodToken
 // at https://github.com/expressjs/morgan/blob/master/index.js
