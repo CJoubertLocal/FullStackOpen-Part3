@@ -12,7 +12,7 @@
     "move:ui": "mv ..\\frontend\\dist .",
     "buildandmove:ui": "(npm run remove:ui) -and (npm run build:ui) -and (npm run move:ui)",
     "deploy": "fly deploy",
-    "deploy:full": "(npm run buildandmove:ui) -and (npm run deploy)",    
+    "deploy:full": "(npm run buildandmove:ui) -and (npm run deploy)",
     "logs:prod": "fly logs"
   },
   "repository": {
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/CJoubertLocal/FullStackOpen-Part3#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "mongoose": "^8.0.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
