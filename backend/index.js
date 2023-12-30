@@ -47,6 +47,9 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
       response.status(404).end()
     }
+  }).catch((error) => {
+    console.log(error)
+    response.status(400).send({ error: "malformedid" })
   })
 })
 
@@ -81,8 +84,17 @@ app.post('/api/persons/', (request, response)=> {
 app.delete('/api/persons/:id', (request, response) => {
   person.deleteOne({_id: request.params.id}).then(res => {
     response.status(204).end()
+  }).catch((error) => {
+    console.log(error)
+    response.status(400).send({ error: "malformedid" })
   })
 })
+
+const unknownURL = (request, response) => {
+  response.status(404).send({ error: 'URL not found' })
+}
+
+app.use(unknownURL)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
