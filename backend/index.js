@@ -17,17 +17,16 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 app.get('/info', (request, response) => {
   const date = new Date();
 
-  const numEntries = person.find({}).then(res => {
+  person.find({}).then(res => {
     info = `<p>
             Phonebook has info for ${res.length} people
           </p>
           <p>
             ${date}
           </p>`
+
     response.set('Content-Type', 'text/html');
-    response.send(
-        info
-    )
+    response.send(info)
   })
 })
 
