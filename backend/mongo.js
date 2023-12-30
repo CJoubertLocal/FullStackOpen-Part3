@@ -1,4 +1,4 @@
-// Example code from https://fullstackopen.com/en/part3/saving_data_to_mongo_db
+// Based on example code from https://fullstackopen.com/en/part3/saving_data_to_mongo_db
 const mongoose = require('mongoose')
 
 if (process.argv.length<3) {
@@ -35,7 +35,6 @@ const personSchema = new mongoose.Schema({
 })
 
 const Person = mongoose.model('Person', personSchema)
-
 
 if (process.argv.length < 7) {
     Person.find({}).then(result => {

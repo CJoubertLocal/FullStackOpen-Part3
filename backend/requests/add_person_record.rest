@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/persons/
+POST http://localhost:3000/api/persons/
 Content-Type: application/json
 
 {
@@ -6,17 +6,25 @@ Content-Type: application/json
     "number": "111-222-333"
 }
 ###
-POST http://localhost:3001/api/persons/
+POST http://localhost:3000/api/persons/
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "number": "44-12343254"
+}
+###
+POST http://localhost:3000/api/persons/
 Content-Type: application/json
 ###
-POST http://localhost:3001/api/persons/
+POST http://localhost:3000/api/persons/
 Content-Type: application/json
 
 {
     "name": "Timmy"
 }
 ###
-POST http://localhost:3001/api/persons/
+POST http://localhost:3000/api/persons/
 Content-Type: application/json
 
 {
