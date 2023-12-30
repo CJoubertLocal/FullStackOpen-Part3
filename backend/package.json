@@ -6,7 +6,14 @@
   "scripts": {
     "start": "node index.js",
     "test": "test",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "remove:ui": "Remove-Item .\\dist -Recurse -Force",
+    "build:ui": "npm run --prefix ..\\frontend build",
+    "move:ui": "mv ..\\frontend\\dist .",
+    "buildandmove:ui": "(npm run remove:ui) -and (npm run build:ui) -and (npm run move:ui)",
+    "deploy": "fly deploy",
+    "deploy:full": "(npm run buildandmove:ui) -and (npm run deploy)",    
+    "logs:prod": "fly logs"
   },
   "repository": {
     "type": "git",
