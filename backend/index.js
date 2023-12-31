@@ -40,20 +40,17 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   person.findById(request.params.id).then(res => {
     if (res) {
       response.json(res)
     } else {
       response.status(404).end()
     }
-  }).catch((error) => {
-    console.log(error)
-    response.status(400).send({ error: "malformedid" })
-  })
+  }).catch(error => next(error))
 })
 
-app.post('/api/persons/', (request, response)=> {
+app.post('/api/persons', (request, response, next)=> {
   if (request.body.name === undefined) {
     return response.status(400).json({
       error: `Please include a name for the person to be added to the phone book.`
@@ -64,10 +61,8 @@ app.post('/api/persons/', (request, response)=> {
     .find({name: request.body.name})
     .then(res => {
       if (res.length > 0) {
-        return response.status(406).json({
-          error: `There is already a phonebok entry with this exact name.`
-        })
-
+        response.redirect(`/api/persons/` + res[0].id)
+        
       } else {
         const newPerson = new person({
           name: request.body.name,
@@ -81,20 +76,44 @@ app.post('/api/persons/', (request, response)=> {
     })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  person.deleteOne({_id: request.params.id}).then(res => {
-    response.status(204).end()
-  }).catch((error) => {
-    console.log(error)
-    response.status(400).send({ error: "malformedid" })
+app.put('/api/persons/:id', (request, response, next) => {
+  const updatedPerson = new person({
+    name: request.body.name,
+    number: request.body.number,
+    _id: request.params.id
   })
+
+  person.findByIdAndUpdate(request.params.id, updatedPerson, { new: true})
+    .then(updatedNote => {
+      response.json(updatedNote)
+    })
+    .catch(error => next(error))
 })
+
+app.delete('/api/persons/:id', (request, response, next) => {
+  person.findByIdAndDelete(request.params.id).then(res => {
+    response.status(204).end()
+  }).catch(error => next(error))
+})
+
 
 const unknownURL = (request, response) => {
   response.status(404).send({ error: 'URL not found' })
 }
 
 app.use(unknownURL)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformed id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
