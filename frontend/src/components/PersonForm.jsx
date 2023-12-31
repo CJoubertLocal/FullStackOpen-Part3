@@ -19,11 +19,11 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
           alert(`${newName} is already added to phonebook`)
         
         } else {
-          const res = PersonService.
-            update(filteredPersons[0].id, personObject, notificationSetter, notificationStyleSetter)
-          
-          if (typeof res !== 'undefined') {
-            res.
+          personObject.auditNumber = filteredPersons[0].auditNumber
+          PersonService.
+            update(filteredPersons[0].id, personObject, notificationSetter, notificationStyleSetter).
+            then(res => {
+              res.
               then(r => {
                 setPersons(
                   persons.
@@ -33,7 +33,12 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
                 setNewName('')
                 setNewNumber('')
               })
-          }
+            }).
+            catch(error => {
+              notificationStyleSetter(false)
+              notificationSetter(error.response.data.error)
+              return
+            })
         }
   
       } else {
@@ -41,8 +46,20 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
           create(personObject, notificationSetter, notificationStyleSetter).
           then(r => {
             setPersons(persons.concat(r))
+            
+            notificationSetter(`${newObject.name} was added to the database`)
+            notificationStyleSetter(true)
+            setTimeout(() => {
+              notificationSetter(null)
+            }, 5000)
+
             setNewName('')
             setNewNumber('')
+
+          }).
+          catch(error => {
+            notificationStyleSetter(false)
+            notificationSetter(error.response.data.error)
           })
       }
     }

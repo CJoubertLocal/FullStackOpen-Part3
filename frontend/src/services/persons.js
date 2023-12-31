@@ -1,22 +1,23 @@
 import axios from 'axios'
 
-const baseUrl = '/api/persons/'
+const baseUrl = '/api/persons'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
 
-const create = (newObject, notificationSetter, notificationStyleSetter) => {
+const create = (newObject) => {
   const request = axios.post(baseUrl, newObject)
-
-  notificationSetter(`${newObject.name} was added to the database`)
-  notificationStyleSetter(true)
-  setTimeout(() => {
-    notificationSetter(null)
-  }, 5000)
-
-  return request.then(response => response.data)
+  return request.
+          then(response => response.data).
+          catch(error => {
+            notificationSetter(`There was an error in adding ${newObject.name} to the database`)
+            notificationStyleSetter(false)
+            setTimeout(() => {
+              notificationSetter(null)
+            }, 5000)
+          })
 }
 
 const update = (id, newObject, notificationSetter, notificationStyleSetter) => {
@@ -26,9 +27,9 @@ const update = (id, newObject, notificationSetter, notificationStyleSetter) => {
     confirmedUpdate = window.confirm(
       `${newObject.name} is already in the phonebook. Do you want to replace the old number with the new one?`
     )
-  } catch(e) {
-    notificationSetter(`${newObject.name} had been removed from the server before I could make this change`)
+  } catch(error) {
     notificationStyleSetter(false)
+    notificationSetter(`There was an error. Please try again.`)
     setTimeout(() => {
       notificationSetter(null)
     }, 5000)
@@ -41,19 +42,20 @@ const update = (id, newObject, notificationSetter, notificationStyleSetter) => {
 
   return request
             .then(response => {
-              notificationSetter(`The number for ${newObject.name} was updated`)
               notificationStyleSetter(true)
+              notificationSetter(`The number for ${newObject.name} was updated`)
               setTimeout(() => {
                 notificationSetter(null)
               }, 5000)
               return response.data
             })
             .catch(error => {
-              notificationSetter(`There was an error in adding ${newObject.name} to the database`)
               notificationStyleSetter(false)
+              notificationSetter(`${newObject.name}'s record was updated or removed by someone else before I could make this change. Please see the most recent changes and try again.`)
               setTimeout(() => {
                 notificationSetter(null)
               }, 5000)
+              throw error
             })
 }
 
