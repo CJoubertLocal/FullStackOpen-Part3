@@ -18,7 +18,11 @@ const personSchema = new mongoose.Schema({
     minLength: 3,
     required: true
   },
-  number: String,
+  number: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
   auditNumber: {
     type: Number,
     required: true

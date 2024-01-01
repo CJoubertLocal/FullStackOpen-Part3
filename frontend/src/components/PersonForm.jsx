@@ -13,7 +13,16 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
         id: persons.length + 1
       }
   
+      if (newName === '') {
+        notificationStyleSetter(false)
+            notificationSetter("Please include a name")
+            setTimeout(() => {
+              notificationSetter(null)
+            }, 5000)
+      }
+
       const filteredPersons = persons.filter(p => p.name === newName)
+
       if (filteredPersons.length > 0) {
         if (filteredPersons.filter(p => p.number === newNumber).length > 0) {
           alert(`${newName} is already added to phonebook`)
@@ -23,16 +32,13 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
           PersonService.
             update(filteredPersons[0].id, personObject, notificationSetter, notificationStyleSetter).
             then(res => {
-              res.
-              then(r => {
                 setPersons(
                   persons.
                     filter(p => p.id !== filteredPersons[0].id).
-                    concat(r)
+                    concat(res)
                 )
                 setNewName('')
                 setNewNumber('')
-              })
             }).
             catch(error => {
               notificationStyleSetter(false)
@@ -46,13 +52,6 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
           create(personObject, notificationSetter, notificationStyleSetter).
           then(r => {
             setPersons(persons.concat(r))
-            
-            notificationSetter(`${newObject.name} was added to the database`)
-            notificationStyleSetter(true)
-            setTimeout(() => {
-              notificationSetter(null)
-            }, 5000)
-
             setNewName('')
             setNewNumber('')
 

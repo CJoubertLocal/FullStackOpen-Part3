@@ -1,22 +1,23 @@
 import axios from 'axios'
 
-const baseUrl = '/api/persons'
+const baseUrl = 'http://localhost:3000/api/persons'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
 
-const create = (newObject) => {
+const create = (newObject, notificationSetter, notificationStyleSetter) => {
   const request = axios.post(baseUrl, newObject)
   return request.
           then(response => response.data).
           catch(error => {
-            notificationSetter(`There was an error in adding ${newObject.name} to the database`)
             notificationStyleSetter(false)
+            notificationSetter(error.response.data.error)
             setTimeout(() => {
               notificationSetter(null)
             }, 5000)
+            return 
           })
 }
 

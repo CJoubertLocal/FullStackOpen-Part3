@@ -70,9 +70,9 @@ app.post('/api/persons', (request, response, next)=> {
     })
   }
 
-  person
-    .find({name: request.body.name})
-    .then(res => {
+  person.
+    find({name: request.body.name}).
+    then(res => {
       if (res.length > 0) {
         response.redirect(`/api/persons/` + res[0].id)
         
@@ -89,7 +89,8 @@ app.post('/api/persons', (request, response, next)=> {
           }).
           catch(error => next(error))
       }
-    })
+    }).
+    catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -121,9 +122,7 @@ app.put('/api/persons/:id', (request, response, next) => {
         .then(updatedNote => {
           response.json(updatedNote)
         })
-        .catch(error => {
-          next(error)
-        })
+        .catch(error => next(error))
     }
   ).
   catch(error => next(error))
