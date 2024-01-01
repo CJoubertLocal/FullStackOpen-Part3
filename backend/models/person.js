@@ -20,8 +20,14 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
-    minLength: 5,
-    required: true
+    minLength: 8,
+    required: true,
+    validate: {
+      validator: function(v) {
+        return /^\d{2}-\d+$|^\d{3}-\d+$/.test(v)
+      },
+      message: props => `Phone numbers should have the format xx-xxxxxxx or xxx-xxxxxx`
+    }
   },
   auditNumber: {
     type: Number,

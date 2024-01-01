@@ -10,14 +10,20 @@ const getAll = () => {
 const create = (newObject, notificationSetter, notificationStyleSetter) => {
   const request = axios.post(baseUrl, newObject)
   return request.
-          then(response => response.data).
+          then(response => {
+            notificationStyleSetter(true)
+            notificationSetter(`${newObject.name} was added to the address book.`)
+            setTimeout(() => {
+              notificationSetter(null)
+            }, 5000)
+            return response.data
+          }).
           catch(error => {
             notificationStyleSetter(false)
             notificationSetter(error.response.data.error)
             setTimeout(() => {
               notificationSetter(null)
             }, 5000)
-            return 
           })
 }
 

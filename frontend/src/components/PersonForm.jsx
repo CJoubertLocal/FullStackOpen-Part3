@@ -19,26 +19,27 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
             setTimeout(() => {
               notificationSetter(null)
             }, 5000)
+        
       }
 
       const filteredPersons = persons.filter(p => p.name === newName)
 
       if (filteredPersons.length > 0) {
         if (filteredPersons.filter(p => p.number === newNumber).length > 0) {
-          alert(`${newName} is already added to phonebook`)
+          alert(`${newName} is already in the phonebook`)
         
         } else {
           personObject.auditNumber = filteredPersons[0].auditNumber
           PersonService.
             update(filteredPersons[0].id, personObject, notificationSetter, notificationStyleSetter).
             then(res => {
-                setPersons(
-                  persons.
-                    filter(p => p.id !== filteredPersons[0].id).
-                    concat(res)
-                )
-                setNewName('')
-                setNewNumber('')
+              setPersons(
+                persons.
+                  filter(p => p.id !== filteredPersons[0].id).
+                  concat(res)
+              )
+              setNewName('')
+              setNewNumber('')
             }).
             catch(error => {
               notificationStyleSetter(false)
@@ -54,7 +55,6 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
             setPersons(persons.concat(r))
             setNewName('')
             setNewNumber('')
-
           }).
           catch(error => {
             notificationStyleSetter(false)
