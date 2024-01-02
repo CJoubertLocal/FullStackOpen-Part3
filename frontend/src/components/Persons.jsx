@@ -1,6 +1,15 @@
+import { PropTypes } from 'prop-types'
 import PersonService from '../services/persons'
 
-const Persons = ({persons, personSetter, filterName, notificationSetter, notificationStyleSetter}) => {
+const Persons = ({ persons, personSetter, filterName, notificationSetter, notificationStyleSetter }) => {
+
+    Persons.propTypes = {
+        persons: PropTypes.instanceOf(Array),
+        personSetter: PropTypes.node.isRequired,
+        filterName: PropTypes.string,
+        notificationSetter: PropTypes.node.isRequired,
+        notificationStyleSetter: PropTypes.node.isRequired,
+    }
 
     const displayPersonList = (filterName === '')
         ? persons.

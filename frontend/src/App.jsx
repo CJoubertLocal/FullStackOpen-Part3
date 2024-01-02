@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { PropTypes } from 'prop-types'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -49,7 +50,13 @@ const App = () => {
   )
 }
 
-const Notification = ({message, useSuccessStyle}) => {
+const Notification = ({ message, useSuccessStyle }) => {
+
+  Notification.propTypes = {
+    message: PropTypes.string,
+    useSuccessStyle: PropTypes.bool,
+  }
+
   const sucessStyle = {
     color: 'green',
     background: 'lightgreen',

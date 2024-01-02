@@ -85,7 +85,7 @@ const deletePerson = (id, arrayToUpdate, setterFunc, notificationSetter, notific
     }
 
     return request
-        .then(response => {
+        .then(() => {
             filterAndUpdate()
             notificationSetter(
                 `${personToDelete} was deleted from the database.`
@@ -95,7 +95,7 @@ const deletePerson = (id, arrayToUpdate, setterFunc, notificationSetter, notific
               notificationSetter(null)
             }, 5000)
         })
-        .catch(error => {
+        .catch(() => {
             notificationSetter(
                 `Information for ${personToDelete} has already been removed from the database.`
             )

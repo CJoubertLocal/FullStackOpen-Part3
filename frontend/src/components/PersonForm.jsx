@@ -1,9 +1,17 @@
 import { useState } from 'react'
+import { PropTypes } from 'prop-types'
 import PersonService from '../services/persons'
 
 const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleSetter}) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
+
+    PersonForm.propTypes = {
+      persons: PropTypes.instanceOf(Array),
+      setPersons: PropTypes.node.isRequired,
+      notificationSetter: PropTypes.node.isRequired,
+      notificationStyleSetter: PropTypes.node.isRequired,
+    }
   
     const addDetails = (event) => {
       event.preventDefault()
@@ -19,7 +27,7 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
             setTimeout(() => {
               notificationSetter(null)
             }, 5000)
-        
+        return
       }
 
       const filteredPersons = persons.filter(p => p.name === newName)
@@ -52,9 +60,13 @@ const PersonForm = ({persons, setPersons, notificationSetter, notificationStyleS
         PersonService.
           create(personObject, notificationSetter, notificationStyleSetter).
           then(r => {
-            setPersons(persons.concat(r))
-            setNewName('')
-            setNewNumber('')
+            if (r) {
+              setPersons(persons.concat(r))
+              setNewName('')
+              setNewNumber('')
+            } else {
+              throw Error
+            }
           }).
           catch(error => {
             notificationStyleSetter(false)
